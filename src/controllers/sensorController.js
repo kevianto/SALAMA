@@ -19,9 +19,9 @@ export const receiveSensorData = async (req, res) => {
 
     const user = req.user; // ⬅️ Picked from middleware
 
-    if (!user?.location?.latitude || !user?.location?.longitude) {
-      return res.status(400).json({ error: "User location not set." });
-    }
+    // if (!user?.location?.latitude || !user?.location?.longitude) {
+    //   return res.status(400).json({ error: "User location not set." });
+    // }
 
     const combinedData = {
       temperature,
@@ -29,8 +29,8 @@ export const receiveSensorData = async (req, res) => {
       waterLevel,
       rainSensor,
       locationInfo: {
-        latitude: user.location.latitude,
-        longitude: user.location.longitude,
+        latitude: user.location.latitude||"0.2900289",
+        longitude: user.location.longitude||"34.7833",
         name: user.location.name || user.name || "Unknown area",
       },
     };
