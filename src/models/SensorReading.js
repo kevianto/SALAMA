@@ -1,17 +1,30 @@
 import mongoose from 'mongoose';
 
 const SensorReadingSchema = new mongoose.Schema({
-  temperature: Number,
-  humidity: Number,
-  waterLevel: Number,
-  rainSensor: Number,
-  interpretation: String,
+  temperature: {
+    type: Number,
+    required: true,
+  },
+  humidity: {
+    type: Number,
+    required: true,
+  },
+  waterLevel: {
+    type: Number,
+    required: true,
+  },
+  rainSensor: {
+    type: Number,
+    required: true,
+  },
+  phone: {
+    type: String,
+    required: true, 
+  },
   
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+}, {
+  timestamps: true,
 });
 
 const SensorReading = mongoose.model('SensorReading', SensorReadingSchema);
-export default SensorReading ;
+export default SensorReading;

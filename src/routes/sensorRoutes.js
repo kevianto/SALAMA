@@ -1,9 +1,11 @@
 import express from 'express';
-import { receiveSensorData } from '../controllers/sensorController.js';
-import { authenticate } from '../middlewares/authMiddleware.js';
+import { saveSensorData } from '../controllers/sensorController.js';
+import { analyzeAndAlert } from '../controllers/alertController.js';
 
 const router = express.Router();
 
-router.post('/data', authenticate,receiveSensorData);
+router.post('/data', saveSensorData);
+router.get('/sensor/analyze', analyzeAndAlert); // Called by backend scheduler or admin
+
 
 export default router;
