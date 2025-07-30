@@ -52,6 +52,7 @@ export const registerUser = async (req, res) => {
   },
   message: 'User registered successfully',
 });
+
    
   } catch (err) {
     console.error("Registration error:", err.message);

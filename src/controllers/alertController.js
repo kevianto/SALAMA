@@ -38,6 +38,7 @@ export const analyzeAndAlert = async (req, res) => {
     // await latestReading.save();
 
     // Send alert if needed
+    console.log("AI Interpretation:", interpretation);
     if (!interpretation.toLowerCase().includes("no flood risk")) {
       await sendSMS(interpretation, [user.phone]);
       req.io.emit('alert', { phone: user.phone, message: interpretation });

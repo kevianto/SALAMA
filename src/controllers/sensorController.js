@@ -1,11 +1,9 @@
-// controllers/sensorController.js
 import SensorReading from '../models/SensorReading.js';
 
 export const saveSensorData = async (req, res) => {
   try {
     const { temperature, humidity, waterLevel, rainSensor, phone } = req.body;
 
-    // Validate required fields
     if (
       temperature == null ||
       humidity == null ||
@@ -16,7 +14,7 @@ export const saveSensorData = async (req, res) => {
       return res.status(400).json({ error: "Missing sensor data or phone." });
     }
 
-    // Save sensor reading without interpretation
+    // Save reading to DB (with phone)
     const reading = await SensorReading.create({
       temperature,
       humidity,
@@ -24,6 +22,14 @@ export const saveSensorData = async (req, res) => {
       rainSensor,
       phone,
     });
+
+    // Prepare data to broadcast (exclude phone)
+    const dataToBroadcast = { temperature, humidity, waterLevel, rainSensor };
+
+   
+
+    // Emit directly from request body (without phone)
+    req.io.emit('sensor-data', dataToBroadcast);
 
     res.status(201).json({ success: true, reading });
   } catch (err) {
