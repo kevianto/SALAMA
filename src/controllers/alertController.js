@@ -1,22 +1,16 @@
-// controllers/alertController.js
+// services/alertAnalyzer.js
 import SensorReading from '../models/SensorReading.js';
 import User from '../models/User.js';
 import { interpretWithGemini } from '../services/geminiService.js';
 import { sendSMS } from '../services/alertService.js';
 
-export const analyzeAndAlert = async (req, res) => {
+export const analyzeAndAlert = async (io) => {
   try {
-    // Find the latest reading
     const latestReading = await SensorReading.findOne().sort({ createdAt: -1 });
-    if (!latestReading) {
-      return res.status(404).json({ error: "No sensor data found." });
-    }
+    if (!latestReading) return;
 
-    // Find user by phone (ensure phone is stored with reading)
     const user = await User.findOne({ phone: latestReading.phone });
-    if (!user) {
-      return res.status(404).json({ error: "User not found for this phone number." });
-    }
+    if (!user) return;
 
     const combinedData = {
       temperature: latestReading.temperature,
@@ -30,23 +24,16 @@ export const analyzeAndAlert = async (req, res) => {
       },
     };
 
-    // AI interpretation
     const interpretation = await interpretWithGemini(combinedData);
-
-    // Update reading with interpretation
-    // latestReading.interpretation = interpretation;
-    // await latestReading.save();
-
-    // Send alert if needed
-    console.log("AI Interpretation:", interpretation);
     if (!interpretation.toLowerCase().includes("no flood risk")) {
       await sendSMS(interpretation, [user.phone]);
-      req.io.emit('alert', { phone: user.phone, message: interpretation });
-    }
+      if (io) {
+        io.emit('alert', { phone: user.null, message: interpretation });
+        
 
-    res.status(200).json({ success: true, message: interpretation });
+      }
+    }
   } catch (err) {
-    console.error("AI analysis error:", err);
-    res.status(500).json({ error: err.message });
+    console.error("AI analysis error:", err.message);
   }
 };

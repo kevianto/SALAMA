@@ -7,11 +7,13 @@ import ConnectToDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import sensorRoutes from './routes/sensorRoutes.js';
 
+
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
+
 
 
 app.use(cors());

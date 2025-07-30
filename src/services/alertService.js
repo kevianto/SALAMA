@@ -8,15 +8,13 @@ const AT = africastalking({
   username: process.env.AT_USERNAME,
 });
 
-const sms = AT.SMS;
+const sms = AT.SMS; // ✅ Correctly reference the initialized SMS service
 
-/**
- * Sends an SMS message to one or more recipients.
- *
- * @param {string[]} recipients - Array of phone numbers (e.g., ['+254712345678'])
- * @param {string} message - The SMS message content
- */
-export async function sendSMS(recipients, message) {
+// recipients should be passed in as a parameter or declared
+const recipients = ['+254712345678',"+254727244105","+254726506405"]; // 🔁 Replace with real number(s)
+const message = '🚨 Flood Alert: Heavy rainfall and high water levels detected. Please evacuate low-lying areas immediately.';
+
+export async function sendSMS() {
   try {
     if (!sms) {
       throw new Error('AfricasTalking SMS service not initialized');
@@ -25,13 +23,11 @@ export async function sendSMS(recipients, message) {
     const result = await sms.send({
       to: recipients,
       message: message,
-      // from: 'AFRICASTKNG' // Optional: Only if you have a registered sender ID
+      // from: 'AFRICASTKNG' // ✅ optional, only if approved sender ID
     });
 
-    console.log("✅ SMS sent:", result);
-    return result;
+    
   } catch (err) {
-    console.error("❌ SMS sending error:", err.message || err);
-    throw err;
+    
   }
 }

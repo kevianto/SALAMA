@@ -1,4 +1,5 @@
 import SensorReading from '../models/SensorReading.js';
+import { analyzeAndAlert } from './alertController.js';
 
 export const saveSensorData = async (req, res) => {
   try {
@@ -22,6 +23,8 @@ export const saveSensorData = async (req, res) => {
       rainSensor,
       phone,
     });
+    // Pass `io` to be used for real-time alert
+    await analyzeAndAlert(req.io);
 
     // Prepare data to broadcast (exclude phone)
     const dataToBroadcast = { temperature, humidity, waterLevel, rainSensor };
