@@ -25,6 +25,7 @@ export const analyzeAndAlert = async (io) => {
     };
 
     const interpretation = await interpretWithGemini(combinedData);
+    console.log("AI Interpretation:", interpretation);  
     if (!interpretation.toLowerCase().includes("no flood risk")) {
       await sendSMS(interpretation, [user.phone]);
       if (io) {

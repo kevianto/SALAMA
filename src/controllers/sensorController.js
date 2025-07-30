@@ -24,7 +24,7 @@ export const saveSensorData = async (req, res) => {
       phone,
     });
     // Pass `io` to be used for real-time alert
-    await analyzeAndAlert(req.io);
+   await analyzeAndAlert(req.io);
 
     // Prepare data to broadcast (exclude phone)
     const dataToBroadcast = { temperature, humidity, waterLevel, rainSensor };
